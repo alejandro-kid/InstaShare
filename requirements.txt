@@ -1,0 +1,8 @@
+connexion
+flask[async]
+flask-sqlalchemy
+gunicorn
+jsonschema
+psycopg2-binary
+sqlalchemy
+swagger-ui-bundle
