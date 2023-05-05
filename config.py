@@ -15,4 +15,5 @@ instashare.app.config["SQLALCHEMY_DATABASE_URI"] = (
     "postgresql+psycopg2://" + f"{DB_PASS}:{DB_USER}@{DB_HOST}/{DB_NAME}"
 )
 instashare.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
+instashare.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "neO1Bhfajt")
 instashare.add_api('swagger.yml')
