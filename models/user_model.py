@@ -37,3 +37,6 @@ class User(db.Model):
         }
         return json.dumps(location_object)
 
+
+    def check_password(self, password):
+        return bcrypt.check_password_hash(self.password, password)
