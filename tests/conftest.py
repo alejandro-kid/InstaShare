@@ -2,10 +2,10 @@ import pytest
 import connexion
 import os
 
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
 from config import instashare
 from db_config import db
+from sqlalchemy import create_engine
+from models.user_model import User
 
 
 DB_USER = os.getenv("DB_USER", "postgres")
@@ -28,6 +28,16 @@ def app():
     app = instashare_test.app
     engine = create_engine(instashare_test.app.config["SQLALCHEMY_DATABASE_URI"])
     db.Model.metadata.create_all(engine)
+
+    #Data test
+    td_name = "Roberto Palomares"
+    td_email = "roberto@gmail.com"
+    td_password = "123qwe"
+    with app.app_context():
+        user = User(td_name, td_email, td_password)
+        db.session.add(user)
+        db.session.commit()
+
     yield app
     db.Model.metadata.drop_all(engine)
 
