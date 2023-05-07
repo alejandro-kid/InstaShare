@@ -1,8 +1,52 @@
 openapi: 3.0.0
 info:
-  title: InstaShare API
+  title: "InstaShare API"
   description: A system called “InstaShare”
   version: 1.0.0
+
+components:
+  schemas:
+    UserRegisterSchema:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 255
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+      required:
+        - name
+        - email
+        - password
+
+    UserRegisterResponseSchema:
+      type: object
+      properties:
+        message:
+          type: string
+          example: User registered successfully
+        success:
+          type: boolean
+          example: true
+        data:
+          type: object
+          properties:
+            id:
+              type: integer
+              pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+              example: 123e4567-e89b-12d3-a456-426614174000
+            name:
+              type: string
+              example: John Doe
+            email:
+              type: string
+              format: email
+              example: jhondoe@gmail.com
+
 paths:
   /createdb:
     get:
@@ -36,3 +80,65 @@ paths:
       responses:
         200:
           description: Application is functioning normally
+
+
+  /user/register:
+    post:
+      operationId: api.auth.register_user
+      tags:
+      - user
+      summary: Register a user
+      description: Register a user
+      requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserRegisterSchema"
+      responses:
+        '201':
+          description: Drone found
+          content:
+            application/json:
+             schema:
+              $ref: "#/components/schemas/UserRegisterResponseSchema"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad request
+        '406':
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not acceptable
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Too many requests
+        'default':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unexpected error
