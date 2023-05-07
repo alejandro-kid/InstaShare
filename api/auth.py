@@ -34,3 +34,34 @@ def register_user():
         response = Response(json.dumps(data), status=409, \
             mimetype="application/json")
     return response
+
+
+def login():
+    request_data = request.get_json()
+    user = User.query.filter_by(email=request_data["email"]).first()
+    if user:
+        if user.check_password(request_data["password"]):
+            data = {
+                "success": True,
+                "message": "Logged successfully",
+                "data": {
+                    "id": user.id
+                }
+            }
+            response = Response(json.dumps(data), status=202, \
+                mimetype="application/json")
+        else:
+            data = {
+                "success": False,
+                "message": "Logged fail"
+            }
+            response = Response(json.dumps(data), status=202, \
+                mimetype="application/json")
+    else:
+        data = {
+            "success": False,
+            "message": "Logged fail"
+        }
+        response = Response(json.dumps(data), status=202, \
+            mimetype="application/json")
+    return response
