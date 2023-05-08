@@ -7,8 +7,21 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:alpine
+        env:
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
 
     steps:
       - uses: actions/checkout@v3
@@ -33,3 +46,8 @@ jobs:
       - name: Test with pytest
         run: |
           pytest
+        env:
+          POSTGRES_HOST: postgres
+          DB_USER: ${{ secrets.POSTGRES_USER }}
+          DB_PASS: ${{ secrets.POSTGRES_PASSWORD }}
+          DB_NAME_TEST: ${{ secrets.POSTGRES_DB }}
