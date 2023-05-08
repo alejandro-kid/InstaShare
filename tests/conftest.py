@@ -2,7 +2,7 @@ import pytest
 import connexion
 import os
 
-from config import instashare
+from config import instashare  # noqa: F401
 from db_config import db
 from sqlalchemy import create_engine
 from models.user_model import User
