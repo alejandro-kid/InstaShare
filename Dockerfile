@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 ENTRYPOINT ["gunicorn"]
 
-CMD ["--workers=4", "app:drone_api"]
+CMD ["--workers=4", "app:instashare"]
