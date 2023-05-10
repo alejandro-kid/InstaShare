@@ -17,7 +17,8 @@ def test_welcome(client):
     assert response.status_code == 200
 
 
-def test_register_user(app, client):
+
+def test_register_user(client):
 
     td_name = "Fabian Piñeiro"
     td_email = "fabian@gmail.com"
