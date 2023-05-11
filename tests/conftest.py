@@ -1,6 +1,7 @@
-import pytest
 import connexion
+import json
 import os
+import pytest
 
 from config import instashare  # noqa: F401
 from db_config import db
@@ -19,6 +20,7 @@ instashare_test.app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 instashare_test.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 instashare_test.app.config["SECRET_KEY"] = "mysecret"
+
 db.init_app(instashare_test.app)
 instashare_test.add_api('../swagger/swagger.yml')
 
@@ -45,3 +47,13 @@ def app():
 def client(app):
     """A test client for the app."""
     return app.test_client()
+
+
+def helper(json_info)->any:
+    for info in json_info:
+        first_row = info.decode("utf-8")
+        return json.loads(first_row)
+
+uuid_regex = (
+    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+)

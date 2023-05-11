@@ -1,16 +1,7 @@
 import json
 import re
+from tests.conftest import helper, uuid_regex
 
-
-uuid_regex = (
-    r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
-)
-
-
-def helper(json_info)->any:
-    for info in json_info:
-        first_row = info.decode("utf-8")
-        return json.loads(first_row)
 
 def test_welcome(client):
     response = client.get("/")
