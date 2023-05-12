@@ -50,3 +50,8 @@ jobs:
           pytest
         env:
           DB_NAME_TEST: postgres
+          PROYECT_ID: ${{ secrets.PROYECT_ID }}
+          PRIVATE_KEY_ID: ${{ secrets.PRIVATE_KEY_ID }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
+          CLIENT_EMAIL: ${{ secrets.CLIENT_EMAIL }}
+          BUCKET: ${{ secrets.BUCKET }}
