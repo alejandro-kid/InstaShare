@@ -21,7 +21,8 @@ def upload_file():
         user = User.query.filter_by(id=user_id).first()
 
         if user:
-            existed_file = File.query.filter_by(user_owner=user_id, name=file_name).first()
+            existed_file = \
+                File.query.filter_by(user_owner=user_id, name=file_name).first()
             if  not existed_file:
 
                 credentials_info = \
