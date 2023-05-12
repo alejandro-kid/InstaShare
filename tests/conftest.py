@@ -3,7 +3,7 @@ import json
 import os
 import pytest
 
-from config import instashare  # noqa: F401
+from config import instashare
 from db_config import db
 from sqlalchemy import create_engine
 from models.user_model import User
@@ -20,6 +20,9 @@ instashare_test.app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 instashare_test.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 instashare_test.app.config["SECRET_KEY"] = "mysecret"
+instashare_test.app.config["BUCKET"] = instashare.app.config["BUCKET"]
+instashare_test.app.config["GOOGLE_APPLICATION_CREDENTIALS"] = \
+    instashare.app.config["GOOGLE_APPLICATION_CREDENTIALS"]
 
 db.init_app(instashare_test.app)
 instashare_test.add_api('../swagger/swagger.yml')
