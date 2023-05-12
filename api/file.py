@@ -1,13 +1,9 @@
-import base64
 import os
-import gzip
 
 from flask import Response, request, json
 from models.user_model import User
 from models.file_model import File
-from db_config import instashare
-from google.cloud import storage
-from google.oauth2 import service_account
+from celery_worker import celery
 
 def upload_file():
     try:
@@ -16,7 +12,6 @@ def upload_file():
         file = request_data["file"]
         file_name = request_data["file_name"]
         user_id = request_data["user_id"]
-        file_name_without_extension = os.path.splitext(file_name)[0]
 
         user = User.query.filter_by(id=user_id).first()
 
@@ -25,22 +20,8 @@ def upload_file():
                 File.query.filter_by(user_owner=user_id, name=file_name).first()
             if  not existed_file:
 
-                credentials_info = \
-                    instashare.app.config["SERVICE_ACCOUNT_INFO"]
-
-                credentials = \
-                    service_account.Credentials.from_service_account_info(credentials_info)
-                storage_client = storage.Client(credentials=credentials)
-
-                # Decodifica el objeto en string codificado.
-                decoded_string = base64.b64decode(file)
-                #Compress data
-                compressed_data = gzip.compress(decoded_string)
-
-                bucket = storage_client.bucket(instashare.app.config["BUCKET"])
-                blob = bucket.blob("{}/{}".format(user_id, \
-                    f"{file_name_without_extension}" + ".zip"))
-                blob.upload_from_string(compressed_data)
+                celery.send_task('tasks.upload_file', args=[file, \
+                        "{}/{}".format(user_id, file_name)])
 
                 file = user.add_file(file_name)
 
