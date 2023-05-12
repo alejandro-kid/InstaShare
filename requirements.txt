@@ -7,3 +7,4 @@ jsonschema
 psycopg2-binary
 sqlalchemy
 swagger-ui-bundle
+google-cloud-storage
