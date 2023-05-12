@@ -1,4 +1,5 @@
 connexion
+celery
 flask[async]
 Flask-CeleryExt
 flask-bcrypt
@@ -7,5 +8,6 @@ gunicorn
 google-cloud-storage
 jsonschema
 psycopg2-binary
+redis
 sqlalchemy
 swagger-ui-bundle
