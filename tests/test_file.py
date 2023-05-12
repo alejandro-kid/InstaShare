@@ -55,7 +55,7 @@ def test_upload_file_model(client, app):
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
-    upload_file(file, f'{user_info["data"]["id"]}/blue.zip')
+    upload_file(decoded_string, f'{user_info["data"]["id"]}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     client = \
@@ -113,7 +113,7 @@ def test_upload_existed_file_model(client, app):
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
-    upload_file(file, f'{user_info["data"]["id"]}/blue.zip')
+    upload_file(decoded_string, f'{user_info["data"]["id"]}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     google_client = \
