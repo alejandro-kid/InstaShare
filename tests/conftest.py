@@ -14,6 +14,15 @@ DB_PASS = os.getenv("DB_PASS", "postgres")
 DB_NAME_TEST = os.getenv("DB_NAME_TEST", "instashare_test")
 DB_HOST = os.getenv("DB_HOST", "localhost")
 
+service_account_info = {
+    "type": "service_account",
+    "project_id": os.getenv("PROYECT_ID"),
+    "private_key_id": os.getenv("PRIVATE_KEY_ID"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "client_email": os.getenv("CLIENT_EMAIL"),
+    "token_uri": "https://oauth2.googleapis.com/token"
+}
+
 instashare_test = connexion.FlaskApp(__name__)
 instashare_test.app.config["SQLALCHEMY_DATABASE_URI"] = (
     "postgresql+psycopg2://" + f"{DB_PASS}:{DB_USER}@{DB_HOST}/{DB_NAME_TEST}"
@@ -21,8 +30,7 @@ instashare_test.app.config["SQLALCHEMY_DATABASE_URI"] = (
 instashare_test.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 instashare_test.app.config["SECRET_KEY"] = "mysecret"
 instashare_test.app.config["BUCKET"] = instashare.app.config["BUCKET"]
-instashare_test.app.config["SERVICE_ACCOUNT_INFO"] = \
-    instashare.app.config["SERVICE_ACCOUNT_INFO"]
+instashare_test.app.config["SERVICE_ACCOUNT_INFO"] = service_account_info
 
 db.init_app(instashare_test.app)
 instashare_test.add_api('../swagger/swagger.yml')
