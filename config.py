@@ -12,7 +12,7 @@ service_account_info = {
     "type": "service_account",
     "project_id": os.getenv("PROYECT_ID"),
     "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-    "private_key": os.getenv("PRIVATE_KEY"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
     "client_email": os.getenv("CLIENT_EMAIL"),
     "token_uri": "https://oauth2.googleapis.com/token"
 }
