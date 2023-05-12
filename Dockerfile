@@ -5,9 +5,9 @@ EXPOSE 8000
 RUN apt update
 RUN apt upgrade -y
 
-RUN mkdir /drone_api
-COPY . /drone_api
-WORKDIR /drone_api
+RUN mkdir /instashare
+COPY . /instashare
+WORKDIR /instashare
 
 RUN pip install -r requirements.txt
 
