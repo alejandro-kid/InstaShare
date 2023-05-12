@@ -1,15 +1,16 @@
 import base64
 import json
-import re
 import os
+import re
 
 from hypothesis import given, settings, HealthCheck
 from hypothesis.strategies import from_regex
 from tests.conftest import helper, uuid_regex
 from google.cloud import storage
+from celery_queue.tasks import upload_file
 
 
-def test_upload_file(client, app):
+def test_upload_file_model(client, app):
 
     td_name = "Olga Corina"
     td_email = "olgacorina@gmail.com"
@@ -54,6 +55,7 @@ def test_upload_file(client, app):
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
+    upload_file(file, f'{user_info["data"]["id"]}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     client = \
@@ -66,7 +68,7 @@ def test_upload_file(client, app):
     assert blob.exists() is True
 
 
-def test_upload_existed_file(client, app):
+def test_upload_existed_file_model(client, app):
 
     td_name = "Olga Corina"
     td_email = "olgacorina@gmail.com"
@@ -111,6 +113,7 @@ def test_upload_existed_file(client, app):
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
+    upload_file(file, f'{user_info["data"]["id"]}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     google_client = \
@@ -130,7 +133,6 @@ def test_upload_existed_file(client, app):
     )), mimetype='application/json')
 
     file_two_info = helper(file_two_response.response)
-    
 
     assert file_two_response.status_code == 409
     assert file_two_response.content_type == 'application/json'
