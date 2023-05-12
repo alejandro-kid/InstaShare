@@ -21,8 +21,8 @@ instashare_test.app.config["SQLALCHEMY_DATABASE_URI"] = (
 instashare_test.app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 instashare_test.app.config["SECRET_KEY"] = "mysecret"
 instashare_test.app.config["BUCKET"] = instashare.app.config["BUCKET"]
-instashare_test.app.config["GOOGLE_APPLICATION_CREDENTIALS"] = \
-    instashare.app.config["GOOGLE_APPLICATION_CREDENTIALS"]
+instashare_test.app.config["SERVICE_ACCOUNT_INFO"] = \
+    instashare.app.config["SERVICE_ACCOUNT_INFO"]
 
 db.init_app(instashare_test.app)
 instashare_test.add_api('../swagger/swagger.yml')

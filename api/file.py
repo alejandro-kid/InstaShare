@@ -24,11 +24,11 @@ def upload_file():
             existed_file = File.query.filter_by(user_owner=user_id, name=file_name).first()
             if  not existed_file:
 
-                credentials_path = \
-                    instashare.app.config["GOOGLE_APPLICATION_CREDENTIALS"] 
+                credentials_info = \
+                    instashare.app.config["SERVICE_ACCOUNT_INFO"]
 
                 credentials = \
-                    service_account.Credentials.from_service_account_file(credentials_path)
+                    service_account.Credentials.from_service_account_info(credentials_info)
                 storage_client = storage.Client(credentials=credentials)
 
                 # Decodifica el objeto en string codificado.
