@@ -1,11 +1,11 @@
 connexion
 flask[async]
+Flask-CeleryExt
 flask-bcrypt
 flask-sqlalchemy
 gunicorn
+google-cloud-storage
 jsonschema
 psycopg2-binary
 sqlalchemy
 swagger-ui-bundle
-google-cloud-storage
-hypothesis
