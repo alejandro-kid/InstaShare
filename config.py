@@ -14,6 +14,7 @@ service_account_info = {
     "private_key_id": os.getenv("PRIVATE_KEY_ID"),
     "private_key": os.getenv("PRIVATE_KEY"),
     "client_email": os.getenv("CLIENT_EMAIL"),
+    "token_uri": "https://oauth2.googleapis.com/token"
 }
 
 # configuration
