@@ -2,7 +2,7 @@ import datetime
 import json
 import uuid
 
-
+from models.file_model import File
 from db_config import db, bcrypt
 from config import instashare
 
@@ -16,6 +16,7 @@ class User(db.Model):
     email = db.Column(db.String(255), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
     registered_on = db.Column(db.DateTime, nullable=False)
+    files = db.relationship('File', backref='user')
 
     def __init__(self, name, email, password):
         self.id = str(uuid.uuid4())
@@ -40,3 +41,9 @@ class User(db.Model):
 
     def check_password(self, password):
         return bcrypt.check_password_hash(self.password, password)
+
+    def add_file(self, name)->File:
+        file = File(name, self.id)
+        db.session.add(file)
+        db.session.commit()
+        return file
