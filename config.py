@@ -1,7 +1,5 @@
-import os
 import connexion
-
-# create an application instance
+import os
 
 instashare = connexion.App(__name__, specification_dir='./swagger')
 
@@ -16,4 +14,9 @@ instashare.app.config["SQLALCHEMY_DATABASE_URI"] = (
 )
 instashare.app.config["SQLALCHEMY_TRACK_MODIFICATIONS"]= True
 instashare.app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "neO1Bhfajt")
+instashare.app.config["BUCKET"] = os.getenv("BUCKET", "insta-share-store")
+instashare.app.config["GOOGLE_APPLICATION_CREDENTIALS"] = \
+    os.getenv("GOOGLE_APPLICATION_CREDENTIALS", \
+    instashare.app.root_path + "/instashare-credentials.json")
+
 instashare.add_api('swagger.yml')
