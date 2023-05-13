@@ -31,13 +31,13 @@ def test_schema_login_user_schema(name, email, password):
 
 
 @given(file=text(min_size=1), \
-       filename=from_regex(r'[A-Za-z0-9]{1,}$+\.[A-Za-z0-9]{1,4}$'),
+       file_name=from_regex(r'[A-Za-z0-9]{1,}\.[A-Za-z0-9]{1,4}'),
        user_id=from_regex(r'^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$')
     )
-def test_schema_upload_file_schema(file, filename, user_id):
+def test_schema_upload_file_schema(file, file_name, user_id):
     td_post_body = {
         "file": str(base64.b64encode(file.encode())),
-        "filename": filename,
+        "file_name": file_name,
         "user_id": user_id
     }
     
