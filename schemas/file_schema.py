@@ -5,14 +5,14 @@ upload_file_schema = {
             "type": "string",
             "contentEncoding": "base64"
         },
-        "filename": {
+        "file_name": {
             "type": "string",
-            "pattern": "[A-Za-z0-9]{1,}$+\.[A-Za-z0-9]{1,4}$"
+            "pattern": r"[A-Za-z0-9]{1,}\.[A-Za-z0-9]{1,4}"
         },
         "user_id": {
             "type": "string",
             "format": "uuid"
         }
     },
-    "required": ["file", "filename", "user_id"]
+    "required": ["file", "file_name", "user_id"]
 }
