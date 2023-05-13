@@ -13,8 +13,8 @@ register_user_schema = {
             "type": "string",
             "minimum": 8,
             },
+    },
     "requiered": ["name", "email", "password"]
-    }
 }
 
 login_user_schema = {
@@ -27,6 +27,6 @@ login_user_schema = {
         "password": {
             "type": "string"
             },
+    },
     "requiered": ["email", "password"]
-    }
 }
