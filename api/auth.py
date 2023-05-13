@@ -29,16 +29,16 @@ def register_user():
                 }
                 response = Response(json.dumps(data), status=201, \
                     mimetype="application/json")
+        else:
+            data = {
+                "success": False,
+                "message": "User already exists. Please Log in."
+            }
+            response = Response(json.dumps(data), status=409, \
+                mimetype="application/json")
 
     except jsonschema.exceptions.ValidationError as exc:
         response = Response(str(exc.message), 400, mimetype="application/json")
-    else:
-        data = {
-            "success": False,
-            "message": "User already exists. Please Log in."
-        }
-        response = Response(json.dumps(data), status=409, \
-            mimetype="application/json")
     return response
 
 
