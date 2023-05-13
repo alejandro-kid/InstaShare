@@ -18,7 +18,7 @@ service_account_info = {
     "type": "service_account",
     "project_id": os.getenv("PROYECT_ID"),
     "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
+    "private_key": os.getenv("PRIVATE_KEY"),
     "client_email": os.getenv("CLIENT_EMAIL"),
     "token_uri": "https://oauth2.googleapis.com/token"
 }
@@ -43,12 +43,20 @@ def app():
     db.Model.metadata.create_all(engine)
 
     #Data test
-    td_name = "Roberto Palomares"
-    td_email = "roberto@gmail.com"
-    td_password = "123qwe"
     with app.app_context():
-        user = User(td_name, td_email, td_password)
-        db.session.add(user)
+        user_1 = User(
+            "Roberto Palomares",
+            "roberto@gmail.com",
+            "CIDEmiNebtL"
+        )
+
+        user_2 = User(
+            "Olga Corina",
+            "olgacorina@gmail.com",
+            "123alekajsnd"
+        )
+        db.session.add(user_1)
+        db.session.add(user_2)
         db.session.commit()
 
     yield app
