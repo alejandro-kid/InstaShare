@@ -1,13 +1,16 @@
 import os
+import jsonschema
 
+from celery_worker import celery
 from flask import Response, request, json
+from schemas.file_schema import upload_file_schema
 from models.user_model import User
 from models.file_model import File
-from celery_worker import celery
 
 def upload_file():
     try:
         request_data = request.get_json()
+        jsonschema.validate(request_data, upload_file_schema)
 
         file = request_data["file"]
         file_name = request_data["file_name"]
@@ -54,8 +57,8 @@ def upload_file():
             response = Response(json.dumps(data), status=404, \
                                 mimetype="application/json")
 
-    except Exception as e:
-        return Response(json.dumps({"message": e}), status=500, \
-                        mimetype="application/json")
+    except jsonschema.exceptions.ValidationError as exc:
+        response = Response(str(exc.message), 400, mimetype="application/json")
+
     return response
 
