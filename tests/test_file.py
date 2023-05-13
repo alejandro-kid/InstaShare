@@ -1,34 +1,19 @@
 import base64
 import json
 import os
-import re
 
 from hypothesis import given, settings, HealthCheck
 from hypothesis.strategies import from_regex
 from tests.conftest import helper, uuid_regex
 from google.cloud import storage
 from celery_queue.tasks import upload_file
+from models.user_model import User
 
 
 def test_upload_file_model(client, app):
 
-    td_name = "Olga Corina"
-    td_email = "olgacorina@gmail.com"
-    td_password = "123alekajsnd"
-
-    user_response = client.post('/user/register', data=json.dumps(dict(
-        name=td_name,
-        email=td_email,
-        password=td_password
-    )), mimetype='application/json')
-
-    user_info = helper(user_response.response)
-
-    assert user_response.status_code == 201
-    assert user_response.content_type == 'application/json'
-    assert user_info["data"]["name"] == td_name
-    assert user_info["data"]["email"] == td_email
-    assert re.match(uuid_regex, user_info["data"]["id"])
+    with app.app_context():
+        registered_client = User.query.filter_by(email="olgacorina@gmail.com").first()
 
     image_path = os.path.join(app.root_path, "files/blue.jpg")
 
@@ -39,7 +24,7 @@ def test_upload_file_model(client, app):
 
 
     file_response = client.post('/upload_file', data=json.dumps(dict(
-        user_id=user_info["data"]["id"],
+        user_id=registered_client.id,
         file_name="blue.jpg",
         file=decoded_string
     )), mimetype='application/json')
@@ -50,12 +35,12 @@ def test_upload_file_model(client, app):
     assert file_response.content_type == 'application/json'
     assert file_info["data"]["file"]["name"] == "blue.jpg"
     assert file_info["data"]["file"]["path"] == \
-        f'{user_info["data"]["id"]}/blue.zip'
-    assert file_info["data"]["user"] == user_info["data"]["id"]
+        f'{registered_client.id}/blue.zip'
+    assert file_info["data"]["user"] == registered_client.id
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
-    upload_file(decoded_string, f'{user_info["data"]["id"]}/blue.zip')
+    upload_file(decoded_string, f'{registered_client.id}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     client = \
@@ -70,23 +55,8 @@ def test_upload_file_model(client, app):
 
 def test_upload_existed_file_model(client, app):
 
-    td_name = "Olga Corina"
-    td_email = "olgacorina@gmail.com"
-    td_password = "123alekajsnd"
-
-    user_response = client.post('/user/register', data=json.dumps(dict(
-        name=td_name,
-        email=td_email,
-        password=td_password
-    )), mimetype='application/json')
-
-    user_info = helper(user_response.response)
-
-    assert user_response.status_code == 201
-    assert user_response.content_type == 'application/json'
-    assert user_info["data"]["name"] == td_name
-    assert user_info["data"]["email"] == td_email
-    assert re.match(uuid_regex, user_info["data"]["id"])
+    with app.app_context():
+        registered_client = User.query.filter_by(email="olgacorina@gmail.com").first()
 
     image_path = os.path.join(app.root_path, "files/blue.jpg")
 
@@ -97,7 +67,7 @@ def test_upload_existed_file_model(client, app):
 
 
     file_response = client.post('/upload_file', data=json.dumps(dict(
-        user_id=user_info["data"]["id"],
+        user_id=registered_client.id,
         file_name="blue.jpg",
         file=decoded_string
     )), mimetype='application/json')
@@ -108,12 +78,12 @@ def test_upload_existed_file_model(client, app):
     assert file_response.content_type == 'application/json'
     assert file_info["data"]["file"]["name"] == "blue.jpg"
     assert file_info["data"]["file"]["path"] == \
-        f'{user_info["data"]["id"]}/blue.zip'
-    assert file_info["data"]["user"] == user_info["data"]["id"]
+        f'{registered_client.id}/blue.zip'
+    assert file_info["data"]["user"] == registered_client.id
     assert file_info["message"] == "File uploaded successfully"
     assert file_info["success"] is True
 
-    upload_file(decoded_string, f'{user_info["data"]["id"]}/blue.zip')
+    upload_file(decoded_string, f'{registered_client.id}/blue.zip')
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     google_client = \
@@ -127,7 +97,7 @@ def test_upload_existed_file_model(client, app):
 
 
     file_two_response = client.post('/upload_file', data=json.dumps(dict(
-        user_id=user_info["data"]["id"],
+        user_id=registered_client.id,
         file_name="blue.jpg",
         file=decoded_string
     )), mimetype='application/json')
