@@ -13,7 +13,7 @@ def test_register_user(client):
 
     td_name = "Fabian Piñeiro"
     td_email = "fabian@gmail.com"
-    td_password = "123qwe"
+    td_password = "CIDEmiNebtL"
 
     response = client.post('/user/register', data=json.dumps(dict(
         name=td_name,
@@ -35,7 +35,7 @@ def test_registered_with_already_registered_user(client):
 
     td_name = "Roberto Palomares"
     td_email = "roberto@gmail.com"
-    td_password = "123qwe"
+    td_password = "CIDEmiNebtL"
     response = client.post('/user/register', data=json.dumps(dict(
     name=td_name,
     email=td_email,
@@ -53,7 +53,7 @@ def test_registered_with_already_registered_user(client):
 def test_user_login(client):
 
     td_email = "roberto@gmail.com"
-    td_password = "123qwe"
+    td_password = "CIDEmiNebtL"
     response = client.post('/user/login', data=json.dumps(dict(
     email=td_email,
     password=td_password
@@ -71,7 +71,7 @@ def test_user_login(client):
 def test_user_login_fail(client):
 
     td_email = "fabian@gmail.com"
-    td_password = "123qwe"
+    td_password = "CIDEmiNebtL"
     response = client.post('/user/login', data=json.dumps(dict(
     email=td_email,
     password=td_password
