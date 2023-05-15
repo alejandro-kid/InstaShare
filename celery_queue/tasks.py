@@ -11,14 +11,14 @@ service_account_info = {
     "type": "service_account",
     "project_id": os.getenv("PROYECT_ID"),
     "private_key_id": os.getenv("PRIVATE_KEY_ID"),
-    "private_key": os.getenv("PRIVATE_KEY"),
+    "private_key": os.getenv("PRIVATE_KEY").replace("\\n", "\n"),
     "client_email": os.getenv("CLIENT_EMAIL"),
     "token_uri": "https://oauth2.googleapis.com/token"
 }
 BUCKET = os.getenv("BUCKET", "insta-share-store")
 
 celery = Celery('tasks', broker=CELERY_BROKER_URL, backend=CELERY_RESULT_BACKEND)
-storage_client = storage.Client.from_service_account_json("instashare-credentials.json")
+storage_client = storage.Client.from_service_account_info(service_account_info)
 
 
 @celery.task(name='tasks.upload_file')
