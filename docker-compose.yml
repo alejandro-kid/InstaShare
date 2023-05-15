@@ -1,0 +1,47 @@
+version: "3.9"
+volumes:
+  postgres-data: {}
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+     - "80:8000"
+    environment:
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_NAME: postgres
+      DB_HOST: postgres-service
+      CELERY_BROKER_URL: redis://redis-service
+      CELERY_RESULT_BACKEND: redis://redis-service
+    depends_on:
+      - redis-service
+      - postgres-service
+  worker:
+    build:
+      context: ./celery_queue
+      dockerfile: Dockerfile
+    command: celery -A tasks worker -l info -E
+    environment:
+      PROYECT_ID:
+      PRIVATE_KEY_ID:
+      PRIVATE_KEY:
+      CLIENT_EMAIL:
+      CELERY_BROKER_URL: redis://redis-service
+      CELERY_RESULT_BACKEND: redis://redis-service
+    depends_on:
+      - redis-service
+  redis-service:
+    image: redis:alpine
+  postgres-service:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
