@@ -1,5 +1,7 @@
 # Instashare "description"
 
+>Important note: To the correct erok of worker container you need to remove the portion of code ```.replace("\\n", "\n")``` in line 14 from task.py under folder **celery_queue**. The problem consist in the diferent environments, in the container of tests works but when we asile the code does no work.
+
 ## The project
 
 The project was built with Connexion framework, which is a flask-based framework that allows describing an API using OpenAPI (or swagger) specification.
