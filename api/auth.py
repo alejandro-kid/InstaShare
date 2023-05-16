@@ -1,10 +1,20 @@
+import datetime
 import json
 import jsonschema
+import jwt
 
+from config import instashare
 from db_config import db
 from flask import Response, request
 from models.user_model import User
 from schemas.user_schema import register_user_schema, login_user_schema
+
+
+def decode_token(token):
+    return {
+        True: jwt.decode(token, instashare.app.config["SECRET_KEY"], \
+                algorithms=["HS256"]), False: None}[token is not None]
+
 
 def register_user():
     try:
@@ -50,12 +60,22 @@ def login():
         user = User.query.filter_by(email=request_data["email"]).first()
         if user:
             if user.check_password(request_data["password"]):
+                payload = {
+                    'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30),
+                    'iat': datetime.datetime.utcnow(),
+                    'sub': user.id
+                }
+
+                token = jwt.encode(
+                    payload,
+                    instashare.app.config["SECRET_KEY"],
+                    algorithm="HS256"
+                )
+
                 data = {
                     "success": True,
                     "message": "Logged successfully",
-                    "data": {
-                        "id": user.id
-                    }
+                    "token": token
                 }
                 response = Response(json.dumps(data), status=202, \
                     mimetype="application/json")

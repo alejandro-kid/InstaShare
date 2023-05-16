@@ -5,6 +5,12 @@ info:
   version: 1.0.0
 
 components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.auth.decode_token
   schemas:
     UserRegisterSchema:
       type: object
@@ -116,6 +122,62 @@ paths:
         200:
           description: Application is functioning normally
 
+  /user:
+    get:
+      operationId: api.user.get_user_information
+      tags:
+      - user
+      security:
+        - bearerAuth: []
+      summary: Get user information
+      description: Get user information
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+             schema:
+              $ref: "#/components/schemas/UserRegisterResponseSchema"
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Bad request
+        '406':
+          description: Not acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Not acceptable
+        '429':
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Too many requests
+        'default':
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unexpected error
 
   /user/register:
     post:
@@ -209,6 +271,8 @@ paths:
       operationId: api.file.upload_file
       tags:
       - file
+      security:
+        - bearerAuth: []
       summary: Upload a file
       description: Upload a file
       requestBody:
@@ -218,9 +282,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  user_id:
-                    type: string
-                    pattern: "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
                   file:
                     type: string
                     format: binary
