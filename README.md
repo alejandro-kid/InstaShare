@@ -6,6 +6,10 @@
 
 The project was built with Connexion framework, which is a flask-based framework that allows describing an API using OpenAPI (or swagger) specification.
 
+### Commits
+
+The author use rebase command to keep the commits clean and short.
+
 ### Swagger file
 
 into swagger folder from root folder of code, you can find the swagger file, which is the specification of the API. This file is used by Connexion to build the API. Here you can find the definition of the endpoints, the parameters, the responses, and the models.
@@ -17,7 +21,6 @@ The exercise  is simple, register users, and upload files. So we have the follow
 - /users/register: POST
 - /users/login: POST
 - /upload_files: POST
-- /files: GET (not implemented)
 
 Once a user is registered, the user can log in and upload files. The files are stored in the designed storage (Google Storage in this case), and the information of the files is stored in a database (PostgreSQL). The files are stored in a folder with the name (id of the user) of its owner. The file is stored and compressed by the requirement of the exercise. If this was not a requirement the main logic to upload a file would be:
 
@@ -45,7 +48,7 @@ The author tried to validate all levels of API. For example in the swagger file,
 
 ### Build Workflow
 
-The build workflow is configured to build and push into his repository the docker image of the application. The workflow is triggered when a push is made into the master, develop or tag. The nomenclature for tagging the container is ```<branch>:<short hash of commit>```The build workflow is configured to build and push into his repository the docker image of the application. The workflow is triggered when a push is made into the master, develop or tag. The nomenclature for tagging the container is ```instashare:<branch>-<short hash of commit>```, but if the container is master the configuration will push two tags, the first is ```instashare:<short hash of commit>``` (without branch) and ```instashare:latest``` (to keep continuously updated the last commit on latest tag). The same logic is fallowed with the worker container.
+The build workflow is configured to build and push into his repository the docker image of the application. The workflow is triggered when a push is made into the master, develop or tag. The nomenclature for tagging the container is ```<branch>:<short hash of commit>```The build workflow is configured to build and push into his repository the docker image of the application. The workflow is triggered when a push is made into the master, develop or tag. The nomenclature for tagging the container is ```instashare:<branch>-<short hash of commit>```, but if the container is master the configuration will push two tags, the first is ```instashare:<short hash of commit>``` (without branch) and ```instashare:latest``` (to keep continuously updated the last commit on latest tag). The same logic is fallowed with the worker container. For this purpose the author use the apps of Github Actions Marketplace.
 
 ### Python test workflow
 
