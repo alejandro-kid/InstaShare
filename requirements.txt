@@ -7,6 +7,7 @@ flask-sqlalchemy
 gunicorn
 jsonschema
 psycopg2-binary
+PyJWT
 redis
 sqlalchemy
 swagger-ui-bundle
