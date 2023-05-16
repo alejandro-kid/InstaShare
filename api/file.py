@@ -7,35 +7,34 @@ from schemas.file_schema import upload_file_schema
 from models.user_model import User
 from models.file_model import File
 
-def upload_file():
+def upload_file(user):
     try:
         request_data = request.get_json()
         jsonschema.validate(request_data, upload_file_schema)
 
         file = request_data["file"]
         file_name = request_data["file_name"]
-        user_id = request_data["user_id"]
 
-        user = User.query.filter_by(id=user_id).first()
+        current_user = User.query.filter_by(id=user).first()
 
-        if user:
+        if current_user:
             existed_file = \
-                File.query.filter_by(user_owner=user_id, name=file_name).first()
+                File.query.filter_by(user_owner=user, name=file_name).first()
             if  not existed_file:
 
                 celery.send_task('tasks.upload_file', args=[file, \
-                        "{}/{}".format(user_id, file_name)])
+                        "{}/{}".format(user, file_name)])
 
-                file = user.add_file(file_name)
+                file = current_user.add_file(file_name)
 
                 data = {
                     "success": True,
                     "message": "File uploaded successfully",
                     "data": {
-                        "user": user.id,
+                        "user": user,
                         "file": {
                             "name": file.name,
-                            "path": user.id + "/" + os.path.splitext(file.name)[0] \
+                            "path": user + "/" + os.path.splitext(file.name)[0] \
                                 + ".zip"
                         }
                     }
