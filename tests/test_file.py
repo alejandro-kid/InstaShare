@@ -2,12 +2,9 @@ import base64
 import json
 import os
 
-from hypothesis import given, settings, HealthCheck
-from hypothesis.strategies import from_regex
-from tests.conftest import helper, uuid_regex
+from tests.conftest import helper
 from google.cloud import storage
 from celery_queue.tasks import upload_file
-from models.user_model import User
 
 
 def test_upload_file_model(client, app):
