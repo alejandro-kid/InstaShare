@@ -52,7 +52,7 @@ def test_upload_file_model(client, app):
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     client = \
-        storage.Client.from_service_account_json("instashare-credentials.json")
+        storage.Client.from_service_account_info(app.config["SERVICE_ACCOUNT_INFO"])
 
     # Obtener una referencia al archivo que deseas verificar
     bucket = client.get_bucket(app.config["BUCKET"])
@@ -106,7 +106,7 @@ def test_upload_existed_file_model(client, app):
 
     # Autenticarse con las credenciales de tu cuenta de servicio
     google_client = \
-        storage.Client.from_service_account_json("instashare-credentials.json")
+        storage.Client.from_service_account_info(app.config["SERVICE_ACCOUNT_INFO"])
 
     # Obtener una referencia al archivo que deseas verificar
     bucket = google_client.get_bucket(app.config["BUCKET"])
